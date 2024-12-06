@@ -1,4 +1,9 @@
-import { PackInBoxRequestDto, PackInBoxResponseDto } from "../types/dto";
+import {
+  ImpositionRequestDto,
+  ImpositionResponseDto,
+  PackInBoxRequestDto,
+  PackInBoxResponseDto,
+} from "../types/dto";
 import {
   IBox,
   ILaminate,
@@ -20,7 +25,7 @@ export class ApiClient {
 
   private async fetchData<T>(
     endpoint: string,
-    fetchParams?: RequestInit
+    fetchParams?: RequestInit,
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     try {
@@ -77,7 +82,17 @@ export class ApiClient {
       {
         method: "POST",
         body: JSON.stringify(body),
-      }
+      },
+    );
+  }
+
+  postImposition(body: ImpositionRequestDto) {
+    return this.fetchData<ImpositionResponseDto>(
+      "/calculations/algo/rect/imposition",
+      {
+        method: "POST",
+        body: JSON.stringify(body),
+      },
     );
   }
 }

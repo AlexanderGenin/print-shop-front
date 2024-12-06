@@ -1,12 +1,12 @@
 import { Form, Checkbox } from "antd";
 
-const RotateRest = () => {
+const ApplyMirror = () => {
   return (
     <Form.Item
-      label="Разрешить поворот остатка на 90°"
+      label="Зеркально по одной оси"
       labelCol={{ span: 16 }}
       wrapperCol={{ span: 8 }}
-      name="allowRotateRest"
+      name="applyMirror"
       valuePropName="checked"
     >
       <Checkbox />
@@ -14,4 +14,4 @@ const RotateRest = () => {
   );
 };
 
-export default RotateRest;
+export default ApplyMirror;

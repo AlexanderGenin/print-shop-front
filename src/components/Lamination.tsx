@@ -2,29 +2,33 @@ import { Checkbox, Form, Radio, Select } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { useApi } from "../context/ApiProvider";
 import { getOptions } from "../utils/getOptions";
+import { MICROMETERS_IN_METER } from "../constants/conversion";
 
 const Lamination = () => {
   const isLaminationOn = Form.useWatch("isLaminationOn");
 
   const api = useApi();
 
-  const { data: laminates, isLoading: isLaminatesLoading } = useQuery({
+  const { data: laminates = [], isLoading: isLaminatesLoading } = useQuery({
     queryKey: ["laminate-types"],
     queryFn: () => api.getLaminates(),
   });
 
-  const { data: laminateThicknesses, isLoading: isLaminateThicknessesLoading } =
-    useQuery({
-      queryKey: ["laminate-thicknesses"],
-      queryFn: () => api.getLaminateThicknesses(),
-    });
+  //   const {
+  //     data: laminateThicknesses = [],
+  //     isLoading: isLaminateThicknessesLoading,
+  //   } = useQuery({
+  //     queryKey: ["laminate-thicknesses"],
+  //     queryFn: () => api.getLaminateThicknesses(),
+  //   });
+  // TODO: Remove hardcoded when API stops returning empty array
+  const laminateThicknesses = [0.00002, 0.00003];
 
-  const laminatesOptions = getOptions(laminates ?? []);
-  const laminateThicknessesOptions =
-    laminateThicknesses?.map((d) => ({
-      label: d,
-      value: d,
-    })) ?? [];
+  const laminatesOptions = getOptions(laminates);
+  const laminateThicknessesOptions = laminateThicknesses?.map((d) => ({
+    label: d * MICROMETERS_IN_METER,
+    value: d,
+  }));
 
   return (
     <>
@@ -46,10 +50,13 @@ const Lamination = () => {
                 loading={isLaminatesLoading}
               />
             </Form.Item>
-            <Form.Item label={"Толщина ламината"} name="laminateThickness">
+            <Form.Item
+              label={"Толщина ламината (мкм)"}
+              name="laminateThickness"
+            >
               <Select
                 options={[...laminateThicknessesOptions]}
-                loading={isLaminateThicknessesLoading}
+                // loading={isLaminateThicknessesLoading}
               />
             </Form.Item>
           </div>
